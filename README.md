@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/epegasus/PegasusUtils.svg)](https://jitpack.io/#epegasus/PegasusUtils)
+[![](https://jitpack.io/v/epegasus/Pegasus-Utils.svg)](https://jitpack.io/#epegasus/Pegasus-Utils)
 # Pegasus-Utils
 
 Android Util classes
@@ -23,7 +23,7 @@ Add maven repository in project level build.gradle or in latest project setting.
 Add inappbilling dependencies in App level build.gradle.
 ```
     dependencies {
-         implementation 'com.github.epegasus:PegasusUtils:1.0.0'
+         implementation 'com.github.epegasus:Pegasus-Utils:1.0.0-alpha-02'
     }
 ```  
 
