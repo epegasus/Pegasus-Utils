@@ -56,7 +56,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'dev.pegasus.utils'
             artifactId = 'utils'
-            version = '1.0.0-alpha-01'
+            version = '1.0.0-alpha-02'
 
             afterEvaluate {
                 from components.release
