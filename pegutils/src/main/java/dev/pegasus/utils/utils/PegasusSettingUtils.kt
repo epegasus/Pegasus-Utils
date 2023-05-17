@@ -1,7 +1,11 @@
 package dev.pegasus.utils.utils
 
 import android.app.SearchManager
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.annotation.StringRes
 import dev.pegasus.utils.extensions.tools.printToErrorLog
@@ -153,6 +157,15 @@ object PegasusSettingUtils {
             } catch (ex: Exception) {
                 ex.printToErrorLog("translateDate")
             }
+        }
+    }
+
+    fun Context?.shareText(title: String, text: String) {
+        this?.let {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_TEXT, text)
+            it.startActivity(Intent.createChooser(intent, title))
         }
     }
 }

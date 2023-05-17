@@ -25,15 +25,3 @@ infix fun View.goneIf(condition: Boolean) =
 
 infix fun View.invisibleIf(condition: Boolean) =
     run { visibility = if (condition) View.INVISIBLE else View.VISIBLE }
-
-
-/**
- *  -> e.g. frameLayout.addCleanView(adView)
- * @param  view: Here AdView is Child
- */
-
-fun ViewGroup.addCleanView(view: View) {
-    (view.parent as? ViewGroup)?.removeView(view)
-    this.removeAllViews()
-    this.addView(view)
-}

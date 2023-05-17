@@ -16,6 +16,7 @@ import androidx.lifecycle.withResumed
 import androidx.lifecycle.withStarted
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dev.pegasus.utils.extensions.tools.printToDebugLog
 import kotlinx.coroutines.launch
 
@@ -110,6 +111,24 @@ fun Fragment.showToast(message: String) {
 
 fun Fragment.showToast(@StringRes stringResId: Int) {
     showToast(getResString(stringResId))
+}
+
+fun Fragment.showSnackbar(message: String, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+    val v: View? = anchorView ?: view
+    v?.let {
+        val snackbar = Snackbar.make(it, message, duration)
+        snackbar.anchorView = anchorView
+        snackbar.show()
+    }
+}
+
+fun Fragment.showSnackbar(@StringRes stringResId: Int, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+    val v: View? = anchorView ?: view
+    v?.let {
+        val snackbar = Snackbar.make(it, getResString(stringResId), duration)
+        snackbar.anchorView = anchorView
+        snackbar.show()
+    }
 }
 
 fun Fragment.hideKeyboard() {
