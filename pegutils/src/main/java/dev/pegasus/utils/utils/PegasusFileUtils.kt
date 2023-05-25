@@ -2,9 +2,16 @@ package dev.pegasus.utils.utils
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import android.webkit.MimeTypeMap
+import androidx.core.content.FileProvider
+import dev.pegasus.utils.R
+import dev.pegasus.utils.extensions.ui.getResString
+import dev.pegasus.utils.extensions.ui.showToast
+import dev.pegasus.utils.utils.PegasusHelperUtils.TAG
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -88,6 +95,34 @@ object PegasusFileUtils {
         var length: Int
         while (source.read(buf).also { length = it } > 0) {
             target.write(buf, 0, length)
+        }
+    }
+
+    fun isFileValid(filePath: String): Boolean {
+        val file = File(filePath)
+        return try {
+            file.exists()
+        } catch (ex: SecurityException) {
+            Log.e(TAG, "isFileValid: FilePath: $filePath", ex)
+            false
+        }
+    }
+
+    fun getUriFromFilePath(context: Context, filePath: String): Uri {
+        val authority = "${context.packageName}.fileprovider"
+        return FileProvider.getUriForFile(context, authority, File(filePath))
+    }
+
+    fun shareFile(context: Context, filePath: String, fileUri: Uri) {
+        if (isFileValid(filePath)) {
+            val shareIntent = Intent()
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.setDataAndType(fileUri, context.contentResolver.getType(fileUri))
+            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
+            context.startActivity(Intent.createChooser(shareIntent, "Choose an app"))
+        } else {
+            Log.e(TAG, "sharePicture: else: $filePath -> Path not Exist")
+            context.showToast(context.getResString(R.string.file_not_found))
         }
     }
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 
 /**
  * @Author: SOHAIB AHMED
@@ -18,7 +17,7 @@ import androidx.fragment.app.Fragment
  *      -> https://www.linkedin.com/in/epegasus
  */
 
-abstract class BaseConsistentFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) : Fragment() {
+abstract class BaseConsistentFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) : BasePermissionFragment() {
 
     /**
      * These properties are only valid between onCreateView and onDestroyView
@@ -27,7 +26,7 @@ abstract class BaseConsistentFragment<T : ViewDataBinding>(@LayoutRes private va
      *          -> before onDestroyView
      */
     private var _binding: T? = null
-    val binding get() = _binding!!
+    protected val binding get() = _binding!!
 
     private var hasInitializedRootView = false
     private var rootView: View? = null
@@ -40,8 +39,8 @@ abstract class BaseConsistentFragment<T : ViewDataBinding>(@LayoutRes private va
      *          -> before onDestroyView
      */
 
-    val globalContext by lazy { binding.root.context }
-    val globalActivity by lazy { globalContext as Activity }
+    protected val globalContext by lazy { binding.root.context }
+    protected val globalActivity by lazy { globalContext as Activity }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         rootView?.let {

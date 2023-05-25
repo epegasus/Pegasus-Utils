@@ -1,7 +1,5 @@
 package dev.pegasus.utils.extensions.dataTypes
 
-import androidx.recyclerview.widget.RecyclerView
-
 /**
  * @Author: SOHAIB AHMED
  * @Date: 20,March,2023
@@ -11,7 +9,3 @@ import androidx.recyclerview.widget.RecyclerView
  */
 
 val Any?.isNull get() = this == null
-
-fun Int.isValidPosition(list: List<Any>): Boolean {
-    return this != RecyclerView.NO_POSITION && list.isNotEmpty() && this < list.size
-}
