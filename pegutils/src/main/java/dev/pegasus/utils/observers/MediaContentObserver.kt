@@ -17,11 +17,21 @@ import android.provider.MediaStore
 
 class MediaContentObserver(private val contentResolver: ContentResolver, private val onChangeCallback: () -> Unit) : ContentObserver(Handler(Looper.getMainLooper())) {
 
+    private var lastTimeOfCall = 0L
+    private var lastTimeOfUpdate = 0L
+    private var thresholdTime: Long = 5000
+
     override fun onChange(selfChange: Boolean, uri: Uri?) {
         super.onChange(selfChange, uri)
 
         // Call the provided callback when a change is detected
-        onChangeCallback.invoke()
+
+        lastTimeOfCall = System.currentTimeMillis()
+
+        if (lastTimeOfCall - lastTimeOfUpdate > thresholdTime) {
+            onChangeCallback.invoke()
+            lastTimeOfUpdate = System.currentTimeMillis()
+        }
     }
 
     fun register() {
