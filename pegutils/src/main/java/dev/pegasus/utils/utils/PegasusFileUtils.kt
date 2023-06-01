@@ -1,10 +1,12 @@
 package dev.pegasus.utils.utils
 
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
@@ -48,7 +50,6 @@ object PegasusFileUtils {
             }
         }
     }
-
 
     fun getFilePathFromUri(context: Context, uri: Uri, index: Int): String =
         if (uri.path?.contains("file://") == true) uri.path!!
@@ -108,11 +109,6 @@ object PegasusFileUtils {
         }
     }
 
-    fun getUriFromFilePath(context: Context, filePath: String): Uri {
-        val authority = "${context.packageName}.fileprovider"
-        return FileProvider.getUriForFile(context, authority, File(filePath))
-    }
-
     fun shareFile(context: Context, filePath: String, fileUri: Uri) {
         if (isFileValid(filePath)) {
             val shareIntent = Intent()
@@ -125,4 +121,40 @@ object PegasusFileUtils {
             context.showToast(context.getResString(R.string.file_not_found))
         }
     }
+
+    fun getUriFromFilePathWithFileProvider(context: Context, filePath: String): Uri {
+        val authority = "${context.packageName}.fileprovider"
+        return FileProvider.getUriForFile(context, authority, File(filePath))
+    }
+
+    fun getImageDeleteUri(context: Context, path: String): Uri? {
+        val cursor = context.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            arrayOf(MediaStore.Images.Media._ID),
+            MediaStore.Images.Media.DATA + " = ?",
+            arrayOf(path),
+            null
+        )
+        val uri = if (cursor != null && cursor.moveToFirst())
+            ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)))
+        else null
+        cursor?.close()
+        return uri
+    }
+
+    fun getVideoDeleteUri(context: Context, path: String): Uri? {
+        val cursor = context.contentResolver.query(
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+            arrayOf(MediaStore.Video.Media._ID),
+            MediaStore.Video.Media.DATA + " = ?",
+            arrayOf(path),
+            null
+        )
+        val uri = if (cursor != null && cursor.moveToFirst())
+            ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)))
+        else null
+        cursor?.close()
+        return uri
+    }
+
 }
