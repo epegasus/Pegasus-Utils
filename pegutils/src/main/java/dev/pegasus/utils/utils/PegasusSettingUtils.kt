@@ -168,4 +168,14 @@ object PegasusSettingUtils {
             it.startActivity(Intent.createChooser(intent, title))
         }
     }
+
+    fun Context?.openSubscriptions() {
+        this?.let {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/account/subscriptions?package=${it.packageName}")));
+            } catch (ex: ActivityNotFoundException) {
+                ex.printToErrorLog("openSubscriptions")
+            }
+        }
+    }
 }

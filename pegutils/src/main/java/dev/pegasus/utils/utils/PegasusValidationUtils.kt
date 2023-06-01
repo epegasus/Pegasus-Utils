@@ -13,10 +13,10 @@ import com.google.android.material.textfield.TextInputLayout
 
 object PegasusValidationUtils {
 
-    fun isNotEmpty(layout: TextInputLayout, edittext: TextInputEditText, errorMessage: String?): Boolean {
+    fun isNotEmpty(layout: TextInputLayout, edittext: TextInputEditText, errorMessage: String? = null): Boolean {
         val text = edittext.text?.trim().toString()
         return if (text.isEmpty()) {
-            layout.error = errorMessage ?: "Field can't be Empty."
+            layout.error = errorMessage ?: "Field can't be empty."
             layout.isErrorEnabled = true
             false
         } else {

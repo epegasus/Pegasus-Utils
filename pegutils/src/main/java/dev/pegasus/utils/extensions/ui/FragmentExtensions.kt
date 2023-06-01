@@ -131,6 +131,15 @@ fun Fragment.showSnackbar(@StringRes stringResId: Int, anchorView: View? = null,
     }
 }
 
+/**
+ * @param view: View should be of edittext or something
+ */
+fun Fragment.showKeyboard(view: View) {
+    view.requestFocus()
+    val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.showSoftInput(view, 0)
+}
+
 fun Fragment.hideKeyboard() {
     activity?.apply {
         val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager

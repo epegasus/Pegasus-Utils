@@ -15,36 +15,38 @@ import dev.pegasus.utils.extensions.tools.printToErrorLog
  *      -> https://www.linkedin.com/in/epegasus
  */
 
+object PegasusScreenUtils {
 
-private const val defaultScreenWidth = 350
-private const val defaultScreenHeight = 700
+    private const val defaultScreenWidth = 350
+    private const val defaultScreenHeight = 700
 
-fun Context?.getScreenWidth(): Int {
-    this?.let {
-        try {
-            val defaultDisplay = it.getSystemService<DisplayManager>()?.getDisplay(Display.DEFAULT_DISPLAY)
-            defaultDisplay?.let { display ->
-                val displayContext = it.createDisplayContext(display)
-                return displayContext.resources.displayMetrics.widthPixels
+    fun Context?.getScreenWidth(): Int {
+        this?.let {
+            try {
+                val defaultDisplay = it.getSystemService<DisplayManager>()?.getDisplay(Display.DEFAULT_DISPLAY)
+                defaultDisplay?.let { display ->
+                    val displayContext = it.createDisplayContext(display)
+                    return displayContext.resources.displayMetrics.widthPixels
+                }
+            } catch (ex: Exception) {
+                ex.printToErrorLog("getScreenWidth")
             }
-        } catch (ex: Exception) {
-            ex.printToErrorLog("getScreenWidth")
         }
+        return defaultScreenWidth
     }
-    return defaultScreenWidth
-}
 
-fun Context?.getScreenHeight(): Int {
-    this?.let {
-        try {
-            val defaultDisplay = it.getSystemService<DisplayManager>()?.getDisplay(Display.DEFAULT_DISPLAY)
-            defaultDisplay?.let { display ->
-                val displayContext = it.createDisplayContext(display)
-                return displayContext.resources.displayMetrics.heightPixels
+    fun Context?.getScreenHeight(): Int {
+        this?.let {
+            try {
+                val defaultDisplay = it.getSystemService<DisplayManager>()?.getDisplay(Display.DEFAULT_DISPLAY)
+                defaultDisplay?.let { display ->
+                    val displayContext = it.createDisplayContext(display)
+                    return displayContext.resources.displayMetrics.heightPixels
+                }
+            } catch (ex: Exception) {
+                ex.printToErrorLog("getScreenHeight")
             }
-        } catch (ex: Exception) {
-            ex.printToErrorLog("getScreenHeight")
         }
+        return defaultScreenHeight
     }
-    return defaultScreenHeight
 }
