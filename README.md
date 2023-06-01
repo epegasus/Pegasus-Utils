@@ -20,10 +20,10 @@ Add maven repository in project level build.gradle or in latest project setting.
 
 ### Step 2
 
-Add inappbilling dependencies in App level build.gradle.
+Add inappbilling dependencies in App level build.gradle. [![](https://jitpack.io/v/epegasus/Pegasus-Utils.svg)](https://jitpack.io/#epegasus/Pegasus-Utils)
 ```
     dependencies {
-         implementation 'com.github.epegasus:Pegasus-Utils:1.0.0-alpha-02'
+         implementation 'com.github.epegasus:Pegasus-Utils:x.x.x'
     }
 ```  
 
@@ -33,3 +33,8 @@ Add inappbilling dependencies in App level build.gradle.
 2) PegasusFileUtils (file utils)
 3) PegasusDateUtils (formating dates)
 4) PegasusHelperUtils (helpers)
+5) PegasusCoroutineUtils (coroutine utils)
+6) PegasusEncryptionUtils (encryption utils)
+7) PegasusScreenUtils (screen utils)
+8) PegasusSettingUtils (setting utils)
+9) PegasusValidationUtils (validation utils)
