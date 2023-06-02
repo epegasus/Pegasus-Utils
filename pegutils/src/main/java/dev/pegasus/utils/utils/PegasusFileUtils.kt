@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -14,6 +15,7 @@ import dev.pegasus.utils.R
 import dev.pegasus.utils.extensions.ui.getResString
 import dev.pegasus.utils.extensions.ui.showToast
 import dev.pegasus.utils.utils.PegasusHelperUtils.TAG
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -157,4 +159,21 @@ object PegasusFileUtils {
         return uri
     }
 
+    fun convertBitmapToCacheFile(context: Context, bitmap: Bitmap, fileName: String): File {
+        // Create a file to write bitmap data
+        val file = File(context.cacheDir, fileName)
+        file.createNewFile()
+
+        // Convert bitmap to byte array
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos)
+        val bitmapData = bos.toByteArray()
+
+        // Write the bytes in file
+        val fos = FileOutputStream(file)
+        fos.write(bitmapData)
+        fos.flush()
+        fos.close()
+        return file
+    }
 }

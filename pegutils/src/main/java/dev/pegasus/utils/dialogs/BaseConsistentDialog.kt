@@ -5,10 +5,10 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * @Author: SOHAIB AHMED
@@ -43,9 +43,7 @@ abstract class BaseConsistentDialog<T : ViewDataBinding>(@LayoutRes private val 
 
         onDialogCreated()
 
-        return AlertDialog.Builder(globalActivity)
-            .setView(binding.root)
-            .create()
+        return MaterialAlertDialogBuilder(globalActivity).setView(binding.root).create()
     }
 
     abstract fun onDialogCreated()
