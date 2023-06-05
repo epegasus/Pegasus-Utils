@@ -53,6 +53,9 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     kapt 'com.github.bumptech.glide:compiler:4.15.1'
+
+    // GSON (JSON to Object & vice versa)
+    implementation "com.google.code.gson:gson:2.10.1"
 }
 
 publishing {
