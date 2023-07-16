@@ -1,5 +1,6 @@
 package dev.pegasus.utils.extensions.ui
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -14,10 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
 import androidx.lifecycle.withResumed
 import androidx.lifecycle.withStarted
+import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dev.pegasus.utils.extensions.tools.printToDebugLog
+import dev.pegasus.utils.utils.PegasusHelperUtils.withDelay
 import kotlinx.coroutines.launch
 
 /**
@@ -95,6 +98,44 @@ fun Fragment.isCurrentDestination(fragmentId: Int): Boolean {
     return findNavController().currentDestination?.id == fragmentId
 }
 
+/* --------------------------- With Parent NavController --------------------------- */
+
+fun Fragment.navigateTo(navController: NavController, fragmentId: Int, action: Int, bundle: Bundle) {
+    launchWhenCreated {
+        if (isAdded && isCurrentDestination(navController, fragmentId)) {
+            navController.navigate(action, bundle)
+        }
+    }
+}
+
+fun Fragment.navigateTo(navController: NavController, fragmentId: Int, action: Int) {
+    launchWhenCreated {
+        if (isAdded && isCurrentDestination(navController, fragmentId)) {
+            navController.navigate(action)
+        }
+    }
+}
+
+fun Fragment.navigateTo(navController: NavController, fragmentId: Int, action: NavDirections) {
+    launchWhenCreated {
+        if (isAdded && isCurrentDestination(navController, fragmentId)) {
+            navController.navigate(action)
+        }
+    }
+}
+
+fun Fragment.popFrom(navController: NavController, fragmentId: Int) {
+    launchWhenCreated {
+        if (isAdded && isCurrentDestination(navController, fragmentId)) {
+            navController.popBackStack()
+        }
+    }
+}
+
+fun Fragment.isCurrentDestination(navController: NavController, fragmentId: Int): Boolean {
+    return navController.currentDestination?.id == fragmentId
+}
+
 /* ----------------------------------------- General -----------------------------------------*/
 
 fun Fragment.getResString(@StringRes stringResId: Int): String {
@@ -134,10 +175,13 @@ fun Fragment.showSnackbar(@StringRes stringResId: Int, anchorView: View? = null,
 /**
  * @param view: View should be of edittext or something
  */
-fun Fragment.showKeyboard(view: View) {
-    view.requestFocus()
-    val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.showSoftInput(view, 0)
+fun Fragment.showKeyboard(activity: Activity, view: View) {
+    val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+    withDelay(500) {
+        view.requestFocus()
+    }
 }
 
 fun Fragment.hideKeyboard() {
