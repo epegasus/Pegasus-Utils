@@ -4,7 +4,6 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.firebase.crashlytics'
-    id 'com.google.devtools.ksp'
     id 'maven-publish'
 }
 
@@ -58,7 +57,7 @@ dependencies {
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
-    ksp 'com.github.bumptech.glide:compiler:4.15.1'
+    kapt 'com.github.bumptech.glide:compiler:4.15.1'
 
     // GSON (JSON to Object & vice versa)
     implementation "com.google.code.gson:gson:2.10.1"
@@ -69,7 +68,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'dev.pegasus.utils'
             artifactId = 'utils'
-            version = '1.0.0-alpha-08'
+            version = '1.0.0-alpha-09'
 
             afterEvaluate {
                 from components.release
