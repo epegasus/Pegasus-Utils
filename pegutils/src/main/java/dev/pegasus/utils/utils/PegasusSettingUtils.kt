@@ -21,7 +21,7 @@ import dev.pegasus.utils.extensions.tools.printToErrorLog
 
 object PegasusSettingUtils {
 
-    fun Context?.openPlayStoreApp(packageName: String) {
+    fun Context?.openPlayStoreApp() {
         this?.let {
             try {
                 it.startActivity(

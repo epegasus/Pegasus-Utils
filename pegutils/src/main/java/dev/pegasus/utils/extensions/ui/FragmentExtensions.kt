@@ -136,6 +136,20 @@ fun Fragment.isCurrentDestination(navController: NavController, fragmentId: Int)
     return navController.currentDestination?.id == fragmentId
 }
 
+/* ----------------------------------------- Delays -----------------------------------------*/
+
+fun Fragment.withDelaySafe(delay: Long = 300, block: () -> Unit) {
+    withDelay(delay) {
+        if (isAdded) block.invoke()
+    }
+}
+
+fun Fragment.launchWhenResumeWithDelay(delay: Long = 300, block: () -> Unit) {
+    withDelay(delay) {
+        launchWhenResumed { block.invoke() }
+    }
+}
+
 /* ----------------------------------------- General -----------------------------------------*/
 
 fun Fragment.getResString(@StringRes stringResId: Int): String {
@@ -178,7 +192,6 @@ fun Fragment.showSnackbar(@StringRes stringResId: Int, anchorView: View? = null,
 fun Fragment.showKeyboard(activity: Activity, view: View) {
     val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-
     withDelay(500) {
         view.requestFocus()
     }

@@ -40,20 +40,20 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
 
     // Exif interface (for image rotation)
     implementation 'androidx.exifinterface:exifinterface:1.3.6'
 
     // Navigational Components
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.5.0'
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.16.0'
@@ -68,7 +68,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'dev.pegasus.utils'
             artifactId = 'utils'
-            version = '1.0.0-alpha-11'
+            version = '1.0.0-alpha-12'
 
             afterEvaluate {
                 from components.release

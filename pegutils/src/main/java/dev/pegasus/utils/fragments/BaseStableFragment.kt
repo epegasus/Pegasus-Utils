@@ -11,13 +11,12 @@ import androidx.databinding.ViewDataBinding
 
 /**
  * @Author: SOHAIB AHMED
- * @Date: 07,April,2023.
+ * @Date: 16,February,2024.
  * @Accounts
  *      -> https://github.com/epegasus
- *      -> https://www.linkedin.com/in/epegasus
+ *      -> https://linkedin.com/in/epegasus
  */
-
-abstract class BaseConsistentFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) : BasePermissionFragment() {
+abstract class BaseStableFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) : BasePermissionFragment() {
 
     /**
      * These properties are only valid between onCreateView and onDestroyView
@@ -27,9 +26,6 @@ abstract class BaseConsistentFragment<T : ViewDataBinding>(@LayoutRes private va
      */
     private var _binding: T? = null
     protected val binding get() = _binding!!
-
-    private var hasInitializedRootView = false
-    private var rootView: View? = null
 
     /**
      * These properties are only valid between onCreateView and onDestroyView
@@ -43,52 +39,22 @@ abstract class BaseConsistentFragment<T : ViewDataBinding>(@LayoutRes private va
     protected val globalActivity by lazy { globalContext as Activity }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        rootView?.let {
-            _binding = DataBindingUtil.bind(it)
-            (it.parent as? ViewGroup)?.removeView(rootView)
-            return it
-        } ?: kotlin.run {
-            _binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-            rootView = binding.root
-            return binding.root
-        }
+        _binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        return binding.root
     }
-
-    /**
-     *      Use the following method in onViewCreated from escaping reinitializing of views
-     *      if (!hasInitializedRootView) {
-     *          hasInitializedRootView = true
-     *          // Your Code...
-     *      }
-     */
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (!hasInitializedRootView) {
-            hasInitializedRootView = true
-            onViewCreatedOneTime()
-        }
-        onViewCreatedEverytime()
+        onViewCreated()
     }
 
     /**
-     *  @since : Write code to be called onetime...
+     *  @since : Start code...
      */
-    abstract fun onViewCreatedOneTime()
-
-    /**
-     *  @since : Write code to be called everytime...
-     */
-    abstract fun onViewCreatedEverytime()
+    abstract fun onViewCreated()
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        hasInitializedRootView = false
-        rootView = null
     }
 }
