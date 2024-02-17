@@ -12,6 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "peg-utils"
+rootProject.name = "Pegasus Utils"
 include ':app'
 include ':pegutils'
