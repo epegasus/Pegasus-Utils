@@ -1,4 +1,4 @@
-package dev.pegasus.utils.extensions.uiComponents
+package dev.pegasus.utils.extensions.components
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
