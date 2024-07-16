@@ -1,23 +1,14 @@
-package dev.pegasus.utils.fragments
+package dev.pegasus.utils.base
 
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 
-/**
- * @Author: SOHAIB AHMED
- * @Date: 16,February,2024.
- * @Accounts
- *      -> https://github.com/epegasus
- *      -> https://linkedin.com/in/epegasus
- */
-
-abstract class BaseStableFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) : BasePermissionFragment() {
+abstract class ParentFragment<T : ViewBinding>(val bindingFactory: (LayoutInflater) -> T) : Fragment() {
 
     /**
      * These properties are only valid between onCreateView and onDestroyView
@@ -40,7 +31,7 @@ abstract class BaseStableFragment<T : ViewDataBinding>(@LayoutRes private val la
     protected val globalActivity by lazy { globalContext as Activity }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        _binding = bindingFactory(inflater)
         return binding.root
     }
 

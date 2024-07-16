@@ -13,6 +13,10 @@ import dev.pegasus.utils.extensions.tools.px
  *      -> https://stackoverflow.com/users/20440272/sohaib-ahmed
  */
 
+/**
+ * Used in recyclerview
+ */
+
 class GridSpacingItemDecoration(spacing: Int, private val spanCount: Int) : RecyclerView.ItemDecoration() {
 
     private var spacingInPixels = 0

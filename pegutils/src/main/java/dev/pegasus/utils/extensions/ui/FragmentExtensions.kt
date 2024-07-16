@@ -168,23 +168,25 @@ fun Fragment.showToast(@StringRes stringResId: Int) {
     showToast(getResString(stringResId))
 }
 
-fun Fragment.showSnackbar(message: String, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+fun Fragment.showSnackBar(message: String, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
     val v: View? = anchorView ?: view
     v?.let {
-        val snackbar = Snackbar.make(it, message, duration)
-        snackbar.anchorView = anchorView
-        snackbar.show()
+        val snackBar = Snackbar.make(it, message, duration)
+        snackBar.anchorView = anchorView
+        snackBar.show()
     }
 }
 
-fun Fragment.showSnackbar(@StringRes stringResId: Int, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+fun Fragment.showSnackBar(@StringRes stringResId: Int, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
     val v: View? = anchorView ?: view
     v?.let {
-        val snackbar = Snackbar.make(it, getResString(stringResId), duration)
-        snackbar.anchorView = anchorView
-        snackbar.show()
+        val snackBar = Snackbar.make(it, getResString(stringResId), duration)
+        snackBar.anchorView = anchorView
+        snackBar.show()
     }
 }
+
+/* ----------------------------------------- Keyboard -----------------------------------------*/
 
 /**
  * @param view: View should be of edittext or something
@@ -204,6 +206,8 @@ fun Fragment.hideKeyboard() {
         imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 }
+
+/* ----------------------------------------- Clipboard -----------------------------------------*/
 
 fun Fragment.copyClipboardData(label: String, data: String) {
     context?.let {
