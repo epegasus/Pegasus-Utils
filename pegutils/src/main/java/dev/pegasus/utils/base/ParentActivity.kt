@@ -4,21 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.viewbinding.ViewBinding
 
-abstract class ParentActivity<T : ViewBinding>(val bindingFactory: (LayoutInflater) -> T) : AppCompatActivity() {
+abstract class ParentActivity<T : ViewBinding>(val bindingFactory: (LayoutInflater) -> T, private val installSplash: Boolean = false) : AppCompatActivity() {
 
-    private val binding by lazy { bindingFactory(layoutInflater) }
+    protected val binding by lazy { bindingFactory(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (installSplash) {
+            installSplashScreen()
+        }
+
         enableEdgeToEdge()
         setContentView(binding.root)
         setPadding()
-
         onCreated()
     }
 

@@ -17,20 +17,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7435b568-ec8e-49aa-b01e-b00a8106f1bf" name="Changes" comment="PegUtils">
-      <change afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/ParentActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/ParentFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pegutils/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/consumer-rules.pro" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/decorators/GridSpacingItemDecoration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/decorators/GridSpacingItemDecoration.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/FragmentExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/FragmentExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/fragments/BaseStableFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/fragments/BaseStableFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/ParentActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/ParentActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +74,9 @@
     &quot;assignee&quot;: &quot;epegasus&quot;
   }
 }</component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="7fb353bc-46d0-4bd4-a455-d8ad09adeb0d" />
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/epegasus/Pegasus-Utils.git&quot;,
@@ -119,10 +111,10 @@
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Volumes/Sohaib - Data/Work/Projects/Android/Github/PegasusUtils",
-    "project.structure.last.edited": "Suggestions",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.17",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+    "settings.editor.selected.configurable": "AndroidSdkUpdater"
   },
   "keyToStringList": {
     "kotlin-gradle-user-dirs": [
@@ -306,7 +298,23 @@
       <option name="project" value="LOCAL" />
       <updated>1714025418760</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="PegUtils">
+      <option name="closed" value="true" />
+      <created>1721140106367</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1721140106367</updated>
+    </task>
+    <task id="LOCAL-00014" summary="PegUtils">
+      <option name="closed" value="true" />
+      <created>1721140134579</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1721140134579</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
