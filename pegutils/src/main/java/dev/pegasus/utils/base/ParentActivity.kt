@@ -3,7 +3,6 @@ package dev.pegasus.utils.base
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
@@ -11,9 +10,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.color.DynamicColors
 import dev.pegasus.utils.utils.PegasusHelperUtils.TAG
 
-abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (LayoutInflater) -> T, private val installSplash: Boolean = false) : AppCompatActivity() {
+abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (LayoutInflater) -> T) : AppCompatActivity() {
 
     protected val binding by lazy { bindingFactory(layoutInflater) }
     protected var includeTopPadding = true
@@ -21,16 +21,8 @@ abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (Layo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (installSplash) {
-            installSplashScreen()
-        }
-        enableEdgeToEdge()
-        enableDynamicTheme()
-
         setContentView(binding.root)
         setPadding()
-        hideStatusBar(-1)
         onCreated()
     }
 
@@ -44,7 +36,15 @@ abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (Layo
         }
     }
 
-    protected open fun enableDynamicTheme() {}
+    protected open fun installSplashTheme() {
+        Log.d(TAG, "installSplashTheme: installed")
+        installSplashScreen()
+    }
+
+    protected open fun enableMaterialDynamicTheme() {
+        Log.d(TAG, "enableMaterialDynamicTheme: enabling")
+        DynamicColors.applyToActivityIfAvailable(this)
+    }
 
     /**
      * @param type
@@ -55,6 +55,7 @@ abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (Layo
      */
 
     protected open fun hideStatusBar(type: Int) {
+        Log.d(TAG, "hideStatusBar: Showing/Hiding: Type: $type")
         WindowInsetsControllerCompat(window, window.decorView).apply {
             systemBarsBehavior = when (type) {
                 0 -> WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
@@ -62,8 +63,9 @@ abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (Layo
             }
             when (type) {
                 0 -> show(WindowInsetsCompat.Type.systemBars())
-                1 -> hide(WindowInsetsCompat.Type.statusBars())
-                2 -> hide(WindowInsetsCompat.Type.navigationBars())
+                1 -> hide(WindowInsetsCompat.Type.systemBars())
+                2 -> hide(WindowInsetsCompat.Type.statusBars())
+                3 -> hide(WindowInsetsCompat.Type.navigationBars())
                 else -> hide(WindowInsetsCompat.Type.systemBars())
             }
         }
