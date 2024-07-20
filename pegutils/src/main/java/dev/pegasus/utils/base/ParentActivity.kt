@@ -3,6 +3,7 @@ package dev.pegasus.utils.base
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
@@ -21,6 +22,7 @@ abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (Layo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(binding.root)
         setPadding()
         onCreated()
