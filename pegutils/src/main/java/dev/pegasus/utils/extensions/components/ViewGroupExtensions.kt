@@ -74,15 +74,32 @@ fun ViewPager2.addCarouselEffect(enableZoom: Boolean = true) {
  */
 
 fun ViewPager2.startAutoScroll(autoScrollHandler: Handler, intervalMillis: Long = 3000) {
+    var isUserInteracting = false
+
     val autoScrollRunnable = object : Runnable {
         override fun run() {
-            val currentItem = currentItem
-            val nextItem = if (currentItem == adapter?.itemCount?.minus(1)) 0 else currentItem + 1
-            this@startAutoScroll.currentItem = nextItem
+            if (!isUserInteracting) {
+                val currentItem = currentItem
+                val nextItem = if (currentItem == adapter?.itemCount?.minus(1)) 0 else currentItem + 1
+                this@startAutoScroll.currentItem = nextItem
+            }
             autoScrollHandler.postDelayed(this, intervalMillis)
         }
     }
+
     autoScrollHandler.postDelayed(autoScrollRunnable, intervalMillis)
+
+    registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageScrollStateChanged(state: Int) {
+            super.onPageScrollStateChanged(state)
+            isUserInteracting = state == ViewPager2.SCROLL_STATE_DRAGGING || state == ViewPager2.SCROLL_STATE_SETTLING
+
+            when (isUserInteracting) {
+                true -> autoScrollHandler.removeCallbacks(autoScrollRunnable)
+                false -> autoScrollHandler.postDelayed(autoScrollRunnable, intervalMillis)
+            }
+        }
+    })
 }
 
 fun ViewPager2.stopAutoScroll(handler: Handler) {

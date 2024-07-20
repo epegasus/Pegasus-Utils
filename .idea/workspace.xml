@@ -17,10 +17,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7435b568-ec8e-49aa-b01e-b00a8106f1bf" name="Changes" comment="PegUtils">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/pegasus/utils/sample/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/pegasus/utils/sample/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/ParentActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/ParentActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ViewGroupExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ViewGroupExtensions.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +29,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=e197b005)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\HUAWEI\.android\avd\Pixel_3_API_35.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -364,7 +363,23 @@
       <option name="project" value="LOCAL" />
       <updated>1721328594205</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="PegUtils">
+      <option name="closed" value="true" />
+      <created>1721479519006</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1721479519006</updated>
+    </task>
+    <task id="LOCAL-00022" summary="PegUtils">
+      <option name="closed" value="true" />
+      <created>1721486232315</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1721486232315</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
