@@ -11,17 +11,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.withCreated
-import androidx.lifecycle.withResumed
-import androidx.lifecycle.withStarted
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dev.pegasus.utils.extensions.tools.printToDebugLog
 import dev.pegasus.utils.utils.PegasusHelperUtils.withDelay
-import kotlinx.coroutines.launch
 
 /**
  * @Author: SOHAIB AHMED
@@ -31,19 +26,6 @@ import kotlinx.coroutines.launch
  *      -> https://stackoverflow.com/users/20440272/sohaib-ahmed
  */
 
-/* ----------------------------------------- Launch's -----------------------------------------*/
-
-fun Fragment.launchWhenCreated(callback: () -> Unit) {
-    lifecycleScope.launch { lifecycle.withCreated(callback) }
-}
-
-fun Fragment.launchWhenStarted(callback: () -> Unit) {
-    lifecycleScope.launch { lifecycle.withStarted(callback) }
-}
-
-fun Fragment.launchWhenResumed(callback: () -> Unit) {
-    lifecycleScope.launch { lifecycle.withResumed(callback) }
-}
 
 /* ----------------------------------------- Navigation's -----------------------------------------*/
 
@@ -168,21 +150,21 @@ fun Fragment.showToast(@StringRes stringResId: Int) {
     showToast(getResString(stringResId))
 }
 
-fun Fragment.showSnackbar(message: String, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+fun Fragment.showSnackBar(message: String, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
     val v: View? = anchorView ?: view
     v?.let {
-        val snackbar = Snackbar.make(it, message, duration)
-        snackbar.anchorView = anchorView
-        snackbar.show()
+        val snackBar = Snackbar.make(it, message, duration)
+        snackBar.anchorView = anchorView
+        snackBar.show()
     }
 }
 
-fun Fragment.showSnackbar(@StringRes stringResId: Int, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+fun Fragment.showSnackBar(@StringRes stringResId: Int, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
     val v: View? = anchorView ?: view
     v?.let {
-        val snackbar = Snackbar.make(it, getResString(stringResId), duration)
-        snackbar.anchorView = anchorView
-        snackbar.show()
+        val snackBar = Snackbar.make(it, getResString(stringResId), duration)
+        snackBar.anchorView = anchorView
+        snackBar.show()
     }
 }
 

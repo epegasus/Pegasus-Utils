@@ -1,4 +1,4 @@
-package dev.pegasus.utils.classes
+package dev.pegasus.utils.liveData
 
 import android.util.Log
 import androidx.annotation.MainThread
