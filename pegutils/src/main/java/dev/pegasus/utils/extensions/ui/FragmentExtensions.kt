@@ -168,6 +168,8 @@ fun Fragment.showSnackBar(@StringRes stringResId: Int, anchorView: View? = null,
     }
 }
 
+/* ----------------------------------------- Keyboard -----------------------------------------*/
+
 /**
  * @param view: View should be of edittext or something
  */
@@ -186,6 +188,8 @@ fun Fragment.hideKeyboard() {
         imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 }
+
+/* ----------------------------------------- Clipboard -----------------------------------------*/
 
 fun Fragment.copyClipboardData(label: String, data: String) {
     context?.let {

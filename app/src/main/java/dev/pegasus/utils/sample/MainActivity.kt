@@ -20,4 +20,15 @@ class MainActivity : AppCompatActivity() {
         binding.mbDateMain.setOnClickListener { startActivity(Intent(this, DateActivity::class.java)) }
         binding.mbFileMain.setOnClickListener { startActivity(Intent(this, FileActivity::class.java)) }
     }
+
+    /*override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashTheme()
+        hideStatusBar(1)
+        enableMaterialDynamicTheme()
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreated() {
+
+    }*/
 }
