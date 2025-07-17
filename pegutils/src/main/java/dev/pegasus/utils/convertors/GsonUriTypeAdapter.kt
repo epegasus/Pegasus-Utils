@@ -1,6 +1,7 @@
 package dev.pegasus.utils.convertors
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
@@ -31,6 +32,6 @@ class GsonUriTypeAdapter : TypeAdapter<Uri>() {
         }
 
         val uriString = `in`.nextString()
-        return Uri.parse(uriString)
+        return uriString.toUri()
     }
 }

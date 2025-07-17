@@ -1,4 +1,4 @@
-package dev.pegasus.utils.activities
+package dev.pegasus.utils.base.activities
 
 import android.os.Bundle
 import android.util.Log
@@ -12,21 +12,14 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.color.DynamicColors
-import dev.pegasus.utils.utils.PegasusConstantUtils.TAG
-
-/**
- * @Author: SOHAIB AHMED
- * @Date: 17/01/2025
- * @Accounts
- *      -> https://github.com/epegasus
- *      -> https://www.linkedin.com/in/epegasus
- */
+import dev.pegasus.utils.utils.PegasusHelperUtils.TAG
 
 abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (LayoutInflater) -> T) : AppCompatActivity() {
 
     protected val binding by lazy { bindingFactory(layoutInflater) }
-    protected var includeTopPadding = false
-    protected var includeBottomPadding = false
+    protected var includeTopPadding = true
+    protected var includeBottomPadding = true
+    protected var statusBarHeight = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         onPreCreated()
@@ -37,13 +30,10 @@ abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (Layo
         onCreated()
     }
 
-    open fun onPreCreated() {
-
-    }
-
     private fun setPadding() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
+            statusBarHeight = bars.top
             val topPadding = if (includeTopPadding) bars.top else 0
             val bottomPadding = if (includeBottomPadding) bars.bottom else 0
             v.updatePadding(left = bars.left, top = topPadding, right = bars.right, bottom = bottomPadding)
@@ -68,7 +58,6 @@ abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (Layo
      *     2: Hide NavigationBars
      *     3: Hide SystemBars
      */
-
     protected open fun hideStatusBar(type: Int) {
         Log.d(TAG, "hideStatusBar: Showing/Hiding: Type: $type")
         WindowInsetsControllerCompat(window, window.decorView).apply {
@@ -86,5 +75,6 @@ abstract class ParentActivity<T : ViewBinding>(private val bindingFactory: (Layo
         }
     }
 
+    open fun onPreCreated() {}
     abstract fun onCreated()
 }

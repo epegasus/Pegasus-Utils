@@ -25,5 +25,4 @@ object PegasusHelperUtils {
     fun getResString(context: Context, @StringRes stringId: Int): String {
         return context.resources.getString(stringId)
     }
-
 }

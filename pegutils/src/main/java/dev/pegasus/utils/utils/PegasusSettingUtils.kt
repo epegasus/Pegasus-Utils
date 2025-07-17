@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import dev.pegasus.utils.extensions.tools.printToErrorLog
 
 
@@ -19,163 +20,167 @@ import dev.pegasus.utils.extensions.tools.printToErrorLog
  *      -> https://www.linkedin.com/in/epegasus
  */
 
+
 object PegasusSettingUtils {
 
-    fun Context?.openPlayStoreApp() {
-        this?.let {
-            try {
-                it.startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${it.packageName}")
-                    )
-                )
-            } catch (ex: Exception) {
-                ex.printToErrorLog("openPlayStoreApp")
-            }
+    private fun Context?.safeContextOrReturn(): Context {
+        this ?: throw IllegalStateException("Context is null")
+        return this
+    }
+
+    /**
+     * Helper function to open a URL with error handling.
+     */
+    fun Context?.openUrl(url: String, tag: String) {
+        this ?: return
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+            startActivity(intent)
+        } catch (ex: Exception) {
+            ex.printToErrorLog(tag)
         }
     }
 
-    fun Context?.rateUs() {
-        this?.let {
-            try {
-                it.startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${it.packageName}")
-                    )
-                )
-            } catch (ex: Exception) {
-                ex.printToErrorLog("rateUs")
+    fun Context?.openUrl(@StringRes urlResId: Int, tag: String) {
+        this ?: return
+        openUrl(getString(urlResId), tag)
+    }
+
+    /**
+     * Opens the Play Store app page for this application.
+     */
+    fun Context?.openPlayStore() {
+        this ?: return
+        val url = "https://play.google.com/store/apps/details?id=${this.packageName}"
+        openUrl(url, "openPlayStore")
+    }
+
+    /**
+     * Opens the Play Store page to rate this app.
+     */
+    fun Context?.rateApp() = openPlayStore()
+
+    /**
+     * Opens a web link (e.g., About Us page) from a string resource.
+     */
+    fun Context?.openLink(@StringRes linkResId: Int) {
+        this ?: return
+        openUrl(linkResId, "openLink")
+    }
+
+    fun Context?.openLink(link: String) {
+        this ?: return
+        openUrl(link, "openLink")
+    }
+
+    /**
+     * Opens the privacy policy link from a string resource.
+     */
+    fun Context?.openPrivacyPolicy(@StringRes linkResId: Int) = openLink(linkResId)
+
+    /**
+     * Sends feedback via email using provided string resource IDs.
+     */
+    fun Context?.sendFeedback(@StringRes emailResId: Int, @StringRes appNameResId: Int) {
+        this ?: return
+        try {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "message/rfc822"
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(emailResId)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(appNameResId))
+                putExtra(Intent.EXTRA_TEXT, "Feedback...")
             }
+            startActivity(Intent.createChooser(intent, "Send mail..."))
+        } catch (ex: ActivityNotFoundException) {
+            ex.printToErrorLog("sendFeedback")
         }
     }
 
-    fun Context?.aboutUs(@StringRes linkStringId: Int) {
-        this?.let {
-            try {
-                it.startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW, Uri.parse(it.getString(linkStringId))
-                    )
-                )
-            } catch (ex: Exception) {
-                ex.printToErrorLog("aboutUs")
+    /**
+     * Shares the app link using app name as subject.
+     */
+    fun Context?.shareApp(@StringRes titleResId: Int? = null, @StringRes messageResId: Int? = null) {
+        this ?: return
+        try {
+            val title = titleResId?.let { getString(it) } ?: "Sharing app..."
+            val body = messageResId?.let { getString(it) } ?: "Download this amazing app using this link: 'https://play.google.com/store/apps/details?id=$packageName'"
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, title)
+                putExtra(Intent.EXTRA_TEXT, body)
             }
+            startActivity(Intent.createChooser(intent, "Share app via"))
+        } catch (ex: Exception) {
+            ex.printToErrorLog("shareApp")
         }
     }
 
-    fun Context?.privacyPolicy(@StringRes policyLinkStringId: Int) {
-        this?.let {
-            try {
-                it.startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW, Uri.parse(it.getString(policyLinkStringId))
-                    )
-                )
-            } catch (ex: Exception) {
-                ex.printToErrorLog("privacyPolicy")
-            }
+    /**
+     * Copies text to clipboard.
+     */
+    fun Context?.copyToClipboard(label: String = "Copied Text", text: String) {
+        this ?: return
+        try {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+            clipboard?.setPrimaryClip(ClipData.newPlainText(label, text))
+        } catch (ex: Exception) {
+            ex.printToErrorLog("copyToClipboard")
         }
     }
 
-    fun Context?.feedback(@StringRes emailStringId: Int, appNameStringId: Int) {
-        this?.let {
-            val emailIntent = Intent(Intent.ACTION_SEND)
-            emailIntent.type = "message/rfc822"
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(it.getString(emailStringId)))
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(appNameStringId))
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "Feedback...")
-            try {
-                it.startActivity(Intent.createChooser(emailIntent, "Send mail..."))
-            } catch (ex: ActivityNotFoundException) {
-                ex.printToErrorLog("feedback")
-            }
-        }
-    }
-
-    fun Context?.shareApp(appNameStringId: Int) {
-        this?.let {
-            try {
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, it.getString(appNameStringId))
-                sendIntent.putExtra(
-                    Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=${it.packageName}"
-                )
-                sendIntent.type = "text/plain"
-                it.startActivity(sendIntent)
-            } catch (ex: Exception) {
-                ex.printToErrorLog("shareApp")
-            }
-        }
-    }
-
-    fun Context?.copyClipboardData(text: String) {
-        this?.let {
-            try {
-                val clipboard = it.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip: ClipData = ClipData.newPlainText("simple text", text)
-                clipboard.setPrimaryClip(clip)
-            } catch (ex: Exception) {
-                ex.printToErrorLog("copyClipboardData")
-            }
-        }
-    }
-
-    fun Context?.shareTextData(data: String) {
-        this?.let {
-            try {
-                val intentTextData = Intent(Intent.ACTION_SEND)
-                intentTextData.type = "text/plain"
-                intentTextData.putExtra(Intent.EXTRA_SUBJECT, "Data")
-                intentTextData.putExtra(Intent.EXTRA_TEXT, data)
-                it.startActivity(Intent.createChooser(intentTextData, "Choose to share"))
-            } catch (ex: Exception) {
-                ex.printToErrorLog("shareTextData")
-            }
-        }
-    }
-
-    fun Context?.searchData(text: String) {
-        this?.let {
-            try {
-                val intentSearch = Intent(Intent.ACTION_WEB_SEARCH)
-                intentSearch.putExtra(SearchManager.QUERY, text)
-                it.startActivity(intentSearch)
-            } catch (ex: Exception) {
-                ex.printToErrorLog("searchData")
-            }
-        }
-    }
-
-    fun Context?.translateDate(mData: String) {
-        this?.let {
-            try {
-                val url = "https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=$mData"
-                val intentTranslate = Intent(Intent.ACTION_VIEW)
-                intentTranslate.data = Uri.parse(url)
-                it.startActivity(intentTranslate)
-            } catch (ex: Exception) {
-                ex.printToErrorLog("translateDate")
-            }
-        }
-    }
-
+    /**
+     * Shares a plain text message.
+     */
     fun Context?.shareText(title: String, text: String) {
-        this?.let {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, text)
-            it.startActivity(Intent.createChooser(intent, title))
+        this ?: return
+        try {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, text)
+            }
+            startActivity(Intent.createChooser(intent, title))
+        } catch (ex: Exception) {
+            ex.printToErrorLog("shareText")
         }
     }
 
-    fun Context?.openSubscriptions() {
-        this?.let {
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/account/subscriptions?package=${it.packageName}")));
-            } catch (ex: ActivityNotFoundException) {
-                ex.printToErrorLog("openSubscriptions")
+    /**
+     * Opens browser to Google Translate with the given query.
+     */
+    fun Context?.translateText(text: String) {
+        this ?: return
+        val encodedText = Uri.encode(text)
+        val url = "https://translate.google.com/?sl=auto&tl=en&text=$encodedText&op=translate"
+        openUrl(url, "translateText")
+    }
+
+    /**
+     * Performs a web search with the given text.
+     */
+    fun Context?.searchWeb(text: String) {
+        this ?: return
+        try {
+            val intent = Intent(Intent.ACTION_WEB_SEARCH).apply {
+                putExtra(SearchManager.QUERY, text)
             }
+            startActivity(intent)
+        } catch (ex: Exception) {
+            ex.printToErrorLog("searchWeb")
         }
     }
+
+    /**
+     * Opens Play Store subscription management screen.
+     */
+    fun Context?.openSubscriptions() {
+        this ?: return
+        try {
+            val url = "https://play.google.com/store/account/subscriptions?package=$packageName"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        } catch (ex: ActivityNotFoundException) {
+            ex.printToErrorLog("openSubscriptions")
+        }
+    }
+
 }

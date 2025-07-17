@@ -19,6 +19,7 @@ object PegasusCoroutineUtils {
             Dispatchers.Main -> "Dispatcher: Main"
             Dispatchers.IO -> "Dispatcher: IO"
             Dispatchers.Default -> "Dispatcher: Default"
+            Dispatchers.Unconfined -> "Dispatcher: UnConfined"
             else -> "Dispatcher: No Idea"
         }
     }

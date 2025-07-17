@@ -1,21 +1,13 @@
 package dev.pegasus.utils.extensions.ui
 
-import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
-import dev.pegasus.utils.extensions.tools.printToDebugLog
 import dev.pegasus.utils.utils.PegasusHelperUtils.withDelay
 
 /**
@@ -132,73 +124,19 @@ fun Fragment.launchWhenResumeWithDelay(delay: Long = 300, block: () -> Unit) {
     }
 }
 
-/* ----------------------------------------- General -----------------------------------------*/
-
-fun Fragment.getResString(@StringRes stringResId: Int): String {
-    return context?.getString(stringResId) ?: ""
-}
-
-fun Fragment.showToast(message: String) {
-    activity?.let {
-        it.runOnUiThread {
-            Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
-        }
-    }
-}
-
-fun Fragment.showToast(@StringRes stringResId: Int) {
-    showToast(getResString(stringResId))
-}
-
-fun Fragment.showSnackBar(message: String, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
-    val v: View? = anchorView ?: view
-    v?.let {
-        val snackBar = Snackbar.make(it, message, duration)
-        snackBar.anchorView = anchorView
-        snackBar.show()
-    }
-}
-
-fun Fragment.showSnackBar(@StringRes stringResId: Int, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
-    val v: View? = anchorView ?: view
-    v?.let {
-        val snackBar = Snackbar.make(it, getResString(stringResId), duration)
-        snackBar.anchorView = anchorView
-        snackBar.show()
-    }
-}
-
 /* ----------------------------------------- Keyboard -----------------------------------------*/
 
-/**
- * @param view: View should be of edittext or something
- */
-fun Fragment.showKeyboard(activity: Activity, view: View) {
-    val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-    withDelay(500) {
-        view.requestFocus()
-    }
+fun Fragment?.hideKeyboard() {
+    val activity = this?.activity ?: return
+    val view = this.view ?: activity.currentFocus ?: View(activity)
+    val imm = ContextCompat.getSystemService(activity, InputMethodManager::class.java)
+    imm?.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-fun Fragment.hideKeyboard() {
-    activity?.apply {
-        val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        val view = currentFocus ?: View(this)
-        imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-    }
-}
-
-/* ----------------------------------------- Clipboard -----------------------------------------*/
-
-fun Fragment.copyClipboardData(label: String, data: String) {
-    context?.let {
-        try {
-            val clipboard = it.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip: ClipData = ClipData.newPlainText(label, data)
-            clipboard.setPrimaryClip(clip)
-        } catch (e: Exception) {
-            e.printToDebugLog("ToolsUtils: copyClipboardData: Exception")
-        }
-    }
+fun Fragment?.showKeyboard(targetView: View? = this?.view) {
+    val activity = this?.activity ?: return
+    val view = targetView ?: return
+    view.requestFocus()
+    val imm = ContextCompat.getSystemService(activity, InputMethodManager::class.java)
+    imm?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
 }

@@ -2,8 +2,12 @@ package dev.pegasus.utils.extensions.ui
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.Toast
-import dev.pegasus.utils.BuildConfig
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -16,31 +20,39 @@ import com.google.android.material.snackbar.Snackbar
  */
 
 
-fun Context.getResString(stringId: Int): String {
-    return resources.getString(stringId)
+/* ---------------------------------------------- Resources ---------------------------------------------- */
+
+fun Context?.getResString(@StringRes stringId: Int): String {
+    return this?.getString(stringId).orEmpty()
 }
 
-fun Context.showToast(message: String) {
-    (this as Activity).runOnUiThread {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+fun Context?.getDrawableResource(@DrawableRes drawableId: Int): Drawable? {
+    return this?.let { ContextCompat.getDrawable(it, drawableId) }
+}
+
+/* ---------------------------------------------- Toast ---------------------------------------------- */
+
+fun Context?.showToast(message: String) {
+    if (this == null) return
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context?.showToast(@StringRes stringId: Int) {
+    this?.showToast(this.getResString(stringId))
+}
+
+/* ---------------------------------------------- SnackBar ---------------------------------------------- */
+
+
+fun Context?.showSnackBar(message: String, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+    val v: View? = anchorView ?: (this as? Activity)?.findViewById(android.R.id.content)
+    v?.let {
+        val snackBar = Snackbar.make(it, message, duration)
+        snackBar.anchorView = anchorView
+        snackBar.show()
     }
 }
 
-fun Context.showToast(stringId: Int) {
-    val message = getResString(stringId)
-    showToast(message)
-}
-
-fun Context.debugToast(message: String) {
-    if (BuildConfig.DEBUG) {
-        showToast(message)
-    }
-}
-
-/* ---------- Snackbar ---------- */
-
-fun Context.showSnackBar(message: String) {
-    (this as Activity).runOnUiThread {
-        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show()
-    }
+fun Context?.showSnackBar(@StringRes stringResId: Int, anchorView: View? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+    this?.showSnackBar(this.getResString(stringResId), anchorView, duration)
 }

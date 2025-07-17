@@ -15,6 +15,12 @@ import java.util.concurrent.atomic.AtomicBoolean
  *      -> https://stackoverflow.com/users/20440272/sohaib-ahmed
  */
 
+/**
+ * A lifecycle-aware observable that sends only new updates after subscription.
+ *      - Useful for events like navigation and SnackBar messages.
+ *      - This avoids a common problem with events: on configuration change
+ *        (like rotation), an update can be emitted if the observer is active.
+ */
 class SingleLiveEvent<T> : MutableLiveData<T>() {
 
     private val pending = AtomicBoolean(false)
@@ -32,6 +38,9 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
         }
     }
 
+    /**
+     * Called to emit a new value. Triggers the observer only once.
+     */
     @MainThread
     override fun setValue(t: T?) {
         pending.set(true)
@@ -47,6 +56,6 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
     }
 
     companion object {
-        private val TAG = "SingleLiveEvent"
+        private const val TAG = "SingleLiveEvent"
     }
 }

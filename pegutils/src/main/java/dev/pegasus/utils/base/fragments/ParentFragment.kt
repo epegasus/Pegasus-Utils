@@ -1,14 +1,12 @@
-package dev.pegasus.utils.base
+package dev.pegasus.utils.base.fragments
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
-abstract class ParentFragment<T : ViewBinding>(val bindingFactory: (LayoutInflater) -> T) : Fragment() {
+abstract class ParentFragment<T : ViewBinding>(val bindingFactory: (LayoutInflater) -> T) : PermissionFragment() {
 
     /**
      * These properties are only valid between onCreateView and onDestroyView
@@ -18,17 +16,6 @@ abstract class ParentFragment<T : ViewBinding>(val bindingFactory: (LayoutInflat
      */
     private var _binding: T? = null
     protected val binding get() = _binding!!
-
-    /**
-     * These properties are only valid between onCreateView and onDestroyView
-     * @property globalContext
-     * @property globalActivity
-     *          -> after onCreateView
-     *          -> before onDestroyView
-     */
-
-    protected val globalContext by lazy { binding.root.context }
-    protected val globalActivity by lazy { globalContext as Activity }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = bindingFactory(inflater)

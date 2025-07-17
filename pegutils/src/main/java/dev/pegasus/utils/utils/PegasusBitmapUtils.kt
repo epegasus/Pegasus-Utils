@@ -10,13 +10,10 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import androidx.exifinterface.media.ExifInterface
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import kotlin.math.roundToInt
 
 /**
@@ -29,140 +26,63 @@ import kotlin.math.roundToInt
 
 object PegasusBitmapUtils {
 
-    private const val TAG_UTILS = "PegasusBitmapUtils"
-
-    private val maxBitmapWidth by lazy { 1080.0f }
-    private val maxBitmapHeight by lazy { 1920.0f }
-
-
-    private fun getCompressedBitmap(bitmap: Bitmap, bitmapCallback: BitmapCallback) = CoroutineScope(Dispatchers.Default).launch {
-        try {
-            val width = bitmap.width
-            val height = bitmap.height
-            val scaleWidth = maxBitmapWidth / width
-            val scaleHeight = maxBitmapHeight / height
-            val scaleFactor = scaleWidth.coerceAtMost(scaleHeight)
-
-            val scale = Matrix()
-            scale.postScale(scaleFactor, scaleFactor)
-
-            val newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, scale, false)
-            withContext(Dispatchers.Main) { bitmapCallback.onSuccess(newBitmap) }
-
-        } catch (ex: OutOfMemoryError) {
-            Log.e(TAG_UTILS, ex.toString())
-            withContext(Dispatchers.Main) { bitmapCallback.onFailure(ex.message.toString()) }
-        } catch (ex: RuntimeException) {
-            Log.e(TAG_UTILS, ex.toString())
-            withContext(Dispatchers.Main) { bitmapCallback.onFailure(ex.message.toString()) }
-        } catch (ex: Exception) {
-            Log.e(TAG_UTILS, ex.toString())
-            withContext(Dispatchers.Main) { bitmapCallback.onFailure(ex.message.toString()) }
-        }
-    }
+    private const val TAG = "PegasusBitmapUtils"
+    private const val MAX_WIDTH = 1080f
+    private const val MAX_HEIGHT = 1920f
 
     /**
-     * @param drawable:         Drawable object to be compressed.
-     * @param isCompress:       Need to compress or not.
-     * @param bitmapCallback:   Callback to be invoked when compressing.
-     *      -> onProcessing:    Called when start to compress.
-     *      -> onSuccess:       Called when success to compress.
-     *      -> onError:         Called when error while compressing.
+     * Converts a Drawable to Bitmap.
+     * Optionally compresses it.
      */
-
-    fun getBitmapFromImageDrawable(drawable: Drawable, isCompress: Boolean = true, bitmapCallback: BitmapCallback) = CoroutineScope(Dispatchers.Default).launch {
-        withContext(Dispatchers.Main) {
-            bitmapCallback.onProcessing()
-        }
-        if (drawable is BitmapDrawable) {
-            if (isCompress) {
-                getCompressedBitmap(drawable.bitmap, bitmapCallback)
-            } else {
-                withContext(Dispatchers.Main) {
-                    try {
-                        bitmapCallback.onSuccess(drawable.bitmap)
-                    } catch (ex: RuntimeException) {
-                        val errorMessage = ex.message.toString()
-                        Log.e(TAG_UTILS, errorMessage)
-                        bitmapCallback.onFailure(errorMessage)
-                    }
+    fun getBitmapFromDrawable(drawable: Drawable, isCompress: Boolean = true): Bitmap? {
+        val bitmap = when (drawable) {
+            is BitmapDrawable -> drawable.bitmap
+            else -> {
+                val width = drawable.intrinsicWidth
+                val height = drawable.intrinsicHeight
+                if (width <= 0 || height <= 0) {
+                    Log.e(TAG, "Drawable has invalid size: $width x $height")
+                    return null
+                }
+                createBitmap(width, height).apply {
+                    val canvas = Canvas(this)
+                    drawable.setBounds(0, 0, canvas.width, canvas.height)
+                    drawable.draw(canvas)
                 }
             }
-            return@launch
         }
 
-        val width = drawable.intrinsicWidth
-        val height = drawable.intrinsicHeight
-
-        if (width <= 0 || height <= 0) {
-            val errorMessage = "getBitmapFromDrawable: width or height must > 0 -> Width = $width, Height = $height"
-            Log.e(TAG_UTILS, errorMessage)
-            withContext(Dispatchers.Main) {
-                bitmapCallback.onFailure(errorMessage)
-            }
-            return@launch
-        }
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        if (isCompress) {
-            getCompressedBitmap(bitmap, bitmapCallback)
-            return@launch
-        }
-        withContext(Dispatchers.Main) {
-            bitmapCallback.onSuccess(bitmap)
-        }
+        return if (isCompress) compressBitmap(bitmap) else bitmap
     }
 
-
     /**
-     * @param context:          Context of application
-     * @param resId:            Resource Id to be compressed. (e.g. R.drawable.image)
-     * @param isCompress:       Need to compress or not.
-     * @param bitmapCallback:   Callback to be invoked when compressing.
-     *      -> onProcessing:    Called when start to compress.
-     *      -> onSuccess:       Called when success to compress.
-     *      -> onError:         Called when error while compressing.
+     * Loads a Drawable from resources and returns a Bitmap.
      */
-
-    fun getBitmapFromImageResource(context: Context, @DrawableRes resId: Int, isCompress: Boolean = true, bitmapCallback: BitmapCallback) = CoroutineScope(Dispatchers.Default).launch {
-        withContext(Dispatchers.Main) {
-            bitmapCallback.onProcessing()
-        }
-        try {
-            val drawable: Drawable? = ContextCompat.getDrawable(context, resId)
-            drawable?.let {
-                getBitmapFromImageDrawable(it, isCompress, bitmapCallback)
-            } ?: run {
-                val errorMessage = "getBitmapFromImageResource: drawable can't be null"
-                throw NullPointerException(errorMessage)
+    fun getBitmapFromResource(context: Context, @DrawableRes resId: Int, isCompress: Boolean = true): Bitmap? {
+        return try {
+            val drawable = ContextCompat.getDrawable(context, resId)
+            when (drawable != null) {
+                true -> getBitmapFromDrawable(drawable, isCompress)
+                false -> {
+                    Log.e(TAG, "Drawable not found for resId: $resId")
+                    null
+                }
             }
-        } catch (ex: NullPointerException) {
-            val errorMessage = ex.message.toString()
-            Log.e(TAG_UTILS, errorMessage)
-            withContext(Dispatchers.Main) {
-                bitmapCallback.onFailure(errorMessage)
-            }
+        } catch (ex: Exception) {
+            Log.e(TAG, "getBitmapFromResource: ${ex.message}", ex)
+            null
         }
     }
 
     /**
-     * @param filePath:         FilePath of the image.
-     * @param isCompress:       Need to compress or not.
-     * @param bitmapCallback:   Callback to be invoked when compressing.
-     *      -> onProcessing:    Called when start to compress.
-     *      -> onSuccess:       Called when success to compress.
-     *      -> onError:         Called when error while compressing.
+     * Loads and decodes a Bitmap from file path, applies EXIF rotation and compression if needed.
      */
-
-    fun getBitmapFromFilePath(filePath: String, isCompress: Boolean = true, bitmapCallback: BitmapCallback) = CoroutineScope(Dispatchers.IO).launch {
-        withContext(Dispatchers.Main) {
-            bitmapCallback.onProcessing()
-        }
-        try {
-            if (!File(filePath).exists()) {
-                throw FileNotFoundException("File not found: $filePath")
+    fun getBitmapFromFilePath(filePath: String, isCompress: Boolean = true): Bitmap? {
+        return try {
+            val file = File(filePath)
+            if (!file.exists()) {
+                Log.e(TAG, "File not found: $filePath")
+                return null
             }
 
             val exif = ExifInterface(filePath)
@@ -172,60 +92,83 @@ object PegasusBitmapUtils {
                 ExifInterface.ORIENTATION_ROTATE_270 -> 270
                 else -> 0
             }
-            if (!isCompress) {
-                val bitmap = BitmapFactory.decodeFile(filePath)
-                val newBitmap = getBitmapExifRotated(rotation, bitmap)
-                withContext(Dispatchers.Main) { bitmapCallback.onSuccess(newBitmap) }
-                return@launch
+
+            val bitmap = when (isCompress) {
+                true -> decodeCompressedBitmap(filePath)
+                false -> BitmapFactory.decodeFile(filePath)
             }
 
-            val options = BitmapFactory.Options().apply {
-                inJustDecodeBounds = true
+            if (bitmap == null) {
+                Log.e(TAG, "Bitmap could not be decoded from: $filePath")
+                null
+            } else {
+                applyExifRotation(bitmap, rotation)
             }
-
-            BitmapFactory.decodeFile(filePath, options)
-
-            val height = options.outHeight
-            val width = options.outWidth
-            var inSampleSize = 1
-
-            if (height > maxBitmapHeight || width > maxBitmapWidth) {
-                val heightRatio = (height.toFloat() / maxBitmapHeight).roundToInt()
-                val widthRatio = (width.toFloat() / maxBitmapWidth).roundToInt()
-                inSampleSize = if (heightRatio < widthRatio) heightRatio else widthRatio
-            }
-
-            options.apply {
-                this.inJustDecodeBounds = false
-                this.inSampleSize = inSampleSize
-            }
-
-            val bitmap = BitmapFactory.decodeFile(filePath, options)
-            val newBitmap = getBitmapExifRotated(rotation, bitmap)
-            withContext(Dispatchers.Main) { bitmapCallback.onSuccess(newBitmap) }
-
-        } catch (ex: OutOfMemoryError) {
-            val errorMessage = ex.message.toString()
-            Log.e(TAG_UTILS, errorMessage)
-            withContext(Dispatchers.Main) { bitmapCallback.onFailure(errorMessage) }
-        } catch (ex: FileNotFoundException) {
-            val errorMessage = ex.message.toString()
-            Log.e(TAG_UTILS, errorMessage)
-            withContext(Dispatchers.Main) { bitmapCallback.onFailure(errorMessage) }
+        } catch (ex: Exception) {
+            Log.e(TAG, "getBitmapFromFilePath: ${ex.message}", ex)
+            null
         }
     }
 
-    private fun getBitmapExifRotated(rotation: Int, bitmap: Bitmap): Bitmap {
+    /**
+     * Compresses a Bitmap to fit within MAX_WIDTH and MAX_HEIGHT.
+     */
+    fun compressBitmap(bitmap: Bitmap, maxWidth: Float? = null, maxHeight: Float? = null): Bitmap {
+        val mw = maxWidth ?: MAX_WIDTH
+        val mh = maxHeight ?: MAX_WIDTH
+        val width = bitmap.width
+        val height = bitmap.height
+        val scaleWidth = mw / width
+        val scaleHeight = mh / height
+        val scaleFactor = scaleWidth.coerceAtMost(scaleHeight)
+
+        val matrix = Matrix().apply { postScale(scaleFactor, scaleFactor) }
+        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false)
+    }
+
+    /**
+     * Applies rotation based on EXIF metadata.
+     */
+    fun applyExifRotation(bitmap: Bitmap, rotation: Int): Bitmap {
         return if (rotation != 0) {
-            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, Matrix().apply { postRotate(rotation.toFloat()) }, true)
-        } else {
-            bitmap
-        }
+            val matrix = Matrix().apply { postRotate(rotation.toFloat()) }
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        } else bitmap
     }
 
-    interface BitmapCallback {
-        fun onProcessing() {}
-        fun onSuccess(bitmap: Bitmap)
-        fun onFailure(errorMessage: String)
+    /**
+     * Decodes a compressed bitmap from file path using sample size.
+     */
+    private fun decodeCompressedBitmap(filePath: String): Bitmap? {
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+
+        BitmapFactory.decodeFile(filePath, options)
+
+        val (height, width) = options.outHeight to options.outWidth
+        var inSampleSize = 1
+
+        if (height > MAX_HEIGHT || width > MAX_WIDTH) {
+            val heightRatio = (height / MAX_HEIGHT).roundToInt()
+            val widthRatio = (width / MAX_WIDTH).roundToInt()
+            inSampleSize = maxOf(1, minOf(heightRatio, widthRatio))
+        }
+
+        options.inJustDecodeBounds = false
+        options.inSampleSize = inSampleSize
+
+        return BitmapFactory.decodeFile(filePath, options)
+    }
+
+    fun Bitmap.convertToCacheFile(context: Context, fileName: String): File {
+        val file = File(context.cacheDir, fileName)
+        file.createNewFile()
+
+        FileOutputStream(file).use { fos ->
+            this.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        }
+
+        return file
     }
 }

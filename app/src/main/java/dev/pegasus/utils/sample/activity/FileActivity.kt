@@ -17,8 +17,7 @@ class FileActivity : AppCompatActivity() {
     }
 
     private fun getExternalStorageSupport() {
-        PegasusFileUtils.isExternalStorageWritable { isAvailable, isWriteable, message ->
-            binding.tvExternalAvailable.text = message
-        }
+        val storageState = PegasusFileUtils.isExternalStorageWritable()
+        binding.tvExternalAvailable.text = storageState.message
     }
 }

@@ -35,62 +35,56 @@ import java.util.Locale
 
 object PegasusFileUtils {
 
+    data class StorageState(val isAvailable: Boolean, val isWritable: Boolean, val message: String)
+
     /* ---------------------- Check if External storage (e.g. SD card) is available ---------------------- */
 
-    fun isExternalStorageWritable(callback: (isAvailable: Boolean, isWriteable: Boolean, message: String) -> Unit) {
-        when (Environment.getExternalStorageState()) {
-            Environment.MEDIA_MOUNTED -> {
-                callback.invoke(true, true, "External storage is available for read and write access")
-            }
-
-            Environment.MEDIA_MOUNTED_READ_ONLY -> {
-                callback.invoke(true, false, "External storage is available for read-only access")
-            }
-
-            else -> {
-                callback.invoke(false, false, "External storage is not available")
-            }
+    fun isExternalStorageWritable(): StorageState {
+        return when (Environment.getExternalStorageState()) {
+            Environment.MEDIA_MOUNTED -> StorageState(isAvailable = true, isWritable = true, message = "External storage is available for read and write access")
+            Environment.MEDIA_MOUNTED_READ_ONLY -> StorageState(isAvailable = true, isWritable = false, message = "External storage is available for read-only access")
+            else -> StorageState(isAvailable = false, isWritable = false, message = "External storage is not available")
         }
     }
 
-    fun getFilePathFromUri(context: Context, uri: Uri, index: Int): String =
-        if (uri.path?.contains("file://") == true) uri.path!!
-        else getFileFromContentUri(context, uri, index).path
+    fun getFilePathFromUri(context: Context, uri: Uri, index: Int): String {
+        return if (uri.path?.contains("file://") == true) {
+            uri.path ?: ""
+        } else {
+            getFileFromContentUri(context, uri, index).path ?: ""
+        }
+    }
 
     private fun getFileFromContentUri(context: Context, contentUri: Uri, index: Int): File {
-        context.let {
-            // Preparing Temp file name
-            val fileExtension = getFileExtension(it, contentUri) ?: ""
-            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val fileName = "temp_file_$timeStamp _$index.$fileExtension"
-            // Creating Temp file
-            val tempFile = File(it.cacheDir, fileName)
-            tempFile.createNewFile()
-            // Initialize streams
-            var oStream: FileOutputStream? = null
-            var inputStream: InputStream? = null
+        val fileExtension = getFileExtension(context, contentUri) ?: "tmp"
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val fileName = "temp_file_${timeStamp}_$index.$fileExtension"
 
-            try {
-                oStream = FileOutputStream(tempFile)
-                inputStream = it.contentResolver.openInputStream(contentUri)
+        val tempFile = File(context.cacheDir, fileName)
+        tempFile.createNewFile()
 
-                inputStream?.let { copy(inputStream, oStream) }
-                oStream.flush()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                // Close streams
-                inputStream?.close()
-                oStream?.close()
+        try {
+            context.contentResolver.openInputStream(contentUri)?.use { inputStream ->
+                FileOutputStream(tempFile).use { outputStream ->
+                    copy(inputStream, outputStream)
+                }
             }
-            return tempFile
+        } catch (e: Exception) {
+            Log.e(TAG, "getFileFromContentUri failed", e)
         }
+
+        return tempFile
     }
 
-    private fun getFileExtension(context: Context, uri: Uri): String? =
-        if (uri.scheme == ContentResolver.SCHEME_CONTENT)
+    private fun getFileExtension(context: Context, uri: Uri): String? {
+        return if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
             MimeTypeMap.getSingleton().getExtensionFromMimeType(context.contentResolver.getType(uri))
-        else uri.path?.let { MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(it)).toString()) }
+        } else {
+            uri.path?.let { path ->
+                MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(path)).toString())
+            }
+        }
+    }
 
     @Throws(IOException::class)
     private fun copy(source: InputStream, target: OutputStream) {
@@ -112,16 +106,19 @@ object PegasusFileUtils {
     }
 
     fun shareFile(context: Context, filePath: String, fileUri: Uri) {
-        if (isFileValid(filePath)) {
-            val shareIntent = Intent()
-            shareIntent.action = Intent.ACTION_SEND
-            shareIntent.setDataAndType(fileUri, context.contentResolver.getType(fileUri))
-            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
-            context.startActivity(Intent.createChooser(shareIntent, "Choose an app"))
-        } else {
-            Log.e(TAG, "sharePicture: else: $filePath -> Path not Exist")
+        if (!isFileValid(filePath)) {
+            Log.e(TAG, "File does not exist: $filePath")
             context.showToast(context.getResString(R.string.file_not_found))
+            return
         }
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            setDataAndType(fileUri, context.contentResolver.getType(fileUri))
+            putExtra(Intent.EXTRA_STREAM, fileUri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(Intent.createChooser(shareIntent, "Choose an app"))
     }
 
     fun getUriFromFilePathWithFileProvider(context: Context, filePath: String): Uri {
@@ -133,14 +130,18 @@ object PegasusFileUtils {
         val cursor = context.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             arrayOf(MediaStore.Images.Media._ID),
-            MediaStore.Images.Media.DATA + " = ?",
+            "${MediaStore.Images.Media.DATA} = ?",
             arrayOf(path),
             null
         )
-        val uri = if (cursor != null && cursor.moveToFirst())
-            ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)))
-        else null
-        cursor?.close()
+
+        val uri = cursor?.use {
+            if (it.moveToFirst()) {
+                val id = it.getLong(it.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
+                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            } else null
+        }
+
         return uri
     }
 
@@ -148,32 +149,18 @@ object PegasusFileUtils {
         val cursor = context.contentResolver.query(
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
             arrayOf(MediaStore.Video.Media._ID),
-            MediaStore.Video.Media.DATA + " = ?",
+            "${MediaStore.Video.Media.DATA} = ?",
             arrayOf(path),
             null
         )
-        val uri = if (cursor != null && cursor.moveToFirst())
-            ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)))
-        else null
-        cursor?.close()
+
+        val uri = cursor?.use {
+            if (it.moveToFirst()) {
+                val id = it.getLong(it.getColumnIndexOrThrow(MediaStore.Video.Media._ID))
+                ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
+            } else null
+        }
+
         return uri
-    }
-
-    fun convertBitmapToCacheFile(context: Context, bitmap: Bitmap, fileName: String): File {
-        // Create a file to write bitmap data
-        val file = File(context.cacheDir, fileName)
-        file.createNewFile()
-
-        // Convert bitmap to byte array
-        val bos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos)
-        val bitmapData = bos.toByteArray()
-
-        // Write the bytes in file
-        val fos = FileOutputStream(file)
-        fos.write(bitmapData)
-        fos.flush()
-        fos.close()
-        return file
     }
 }

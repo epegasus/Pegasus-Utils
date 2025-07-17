@@ -1,6 +1,5 @@
-package dev.pegasus.utils.dialogs
+package dev.pegasus.utils.base.dialogs
 
-import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,18 +25,6 @@ abstract class ParentDialog<T : ViewBinding>(val bindingFactory: (LayoutInflater
      */
     private var _binding: T? = null
     protected val binding get() = _binding!!
-
-    /**
-     * These properties are only valid between onCreateView and onDestroyView
-     * @property globalContext
-     * @property globalActivity
-     *          -> after onCreateView
-     *          -> before onDestroyView
-     */
-
-    protected val globalContext by lazy { binding.root.context }
-    protected val globalActivity by lazy { globalContext as Activity }
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = bindingFactory(layoutInflater)

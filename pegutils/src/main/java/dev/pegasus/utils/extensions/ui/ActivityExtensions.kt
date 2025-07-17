@@ -1,13 +1,16 @@
 package dev.pegasus.utils.extensions.ui
 
 import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -21,7 +24,36 @@ import androidx.fragment.app.FragmentContainerView
  *      -> https://stackoverflow.com/users/20440272/sohaib-ahmed
  */
 
-fun Activity.hideSystemUI(fcvContainerMain: FragmentContainerView) {
+fun Activity?.getResString(@StringRes stringResId: Int): String {
+    this ?: return ""
+    return getString(stringResId)
+}
+
+fun Activity?.showToast(message: String) {
+    this ?: return
+    runOnUiThread {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun Activity?.showToast(@StringRes stringResId: Int) {
+    showToast(getResString(stringResId))
+}
+
+/* ---------------------------------------------- BackPress ---------------------------------------------- */
+
+fun AppCompatActivity.onBackPressedDispatcher(callback: () -> Unit) {
+    onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            callback.invoke()
+        }
+    })
+}
+
+/* ---------------------------------------------- System UI ---------------------------------------------- */
+
+fun Activity?.hideSystemUI(fcvContainerMain: FragmentContainerView) {
+    this ?: return
     WindowCompat.setDecorFitsSystemWindows(window, false)
     WindowInsetsControllerCompat(window, fcvContainerMain).let { controller ->
         controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -30,7 +62,8 @@ fun Activity.hideSystemUI(fcvContainerMain: FragmentContainerView) {
 }
 
 @Suppress("DEPRECATION")
-fun Activity.showSystemUI() {
+fun Activity?.showSystemUI() {
+    this ?: return
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         WindowCompat.setDecorFitsSystemWindows(window, true)
         val controller = window.insetsController
@@ -41,22 +74,20 @@ fun Activity.showSystemUI() {
     }
 }
 
-fun Activity.hideKeyboard() {
-    val inputMethodManager: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+/* ---------------------------------------------- Keyboard ---------------------------------------------- */
+
+// Hides the keyboard from the currently focused view
+fun Activity?.hideKeyboard() {
+    this ?: return
     val view = currentFocus ?: View(this)
-    inputMethodManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-fun Activity.getResString(@StringRes stringResId: Int): String {
-    return getString(stringResId)
-}
-
-fun Activity.showToast(message: String) {
-    runOnUiThread {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-}
-
-fun Activity.showToast(@StringRes stringResId: Int) {
-    showToast(getResString(stringResId))
+// Shows the keyboard and focuses on the given view
+fun Activity?.showKeyboard(view: View) {
+    this ?: return
+    view.requestFocus()
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
 }

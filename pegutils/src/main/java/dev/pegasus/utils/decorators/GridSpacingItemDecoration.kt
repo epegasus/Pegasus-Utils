@@ -3,7 +3,7 @@ package dev.pegasus.utils.decorators
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import dev.pegasus.utils.extensions.tools.px
+import dev.pegasus.utils.extensions.dataTypes.toPx
 
 /**
  * @Author: SOHAIB AHMED
@@ -22,7 +22,7 @@ class GridSpacingItemDecoration(spacing: Int, private val spanCount: Int) : Recy
     private var spacingInPixels = 0
 
     init {
-        spacingInPixels = spacing.px
+        spacingInPixels = spacing.toPx
     }
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

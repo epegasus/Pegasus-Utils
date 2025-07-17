@@ -19,7 +19,7 @@ class MediaContentObserver(private val contentResolver: ContentResolver, private
 
     private var lastTimeOfCall = 0L
     private var lastTimeOfUpdate = 0L
-    private var thresholdTime: Long = 5000
+    var thresholdTime: Long = 5000
 
     override fun onChange(selfChange: Boolean, uri: Uri?) {
         super.onChange(selfChange, uri)
