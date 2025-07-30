@@ -16,60 +16,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7435b568-ec8e-49aa-b01e-b00a8106f1bf" name="Changes" comment="PegUtils">
-      <change afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ViewPagerExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/pegasus/utils/sample/activity/BitmapActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/pegasus/utils/sample/activity/BitmapActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/pegasus/utils/sample/activity/FileActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/pegasus/utils/sample/activity/FileActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/activities/ParentActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/adapters/ClickBindingAdapter.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/adapters/ImageBindingAdapter.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/ParentActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/activities/ParentActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/ParentFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/fragments/ParentFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/bottomSheets/BaseSheet.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/bottomSheets/ParentSheet.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/bottomSheets/MyBottomSheetDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/bottomSheets/ParentSheetDismissal.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/convertors/GsonUriTypeAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/convertors/GsonUriTypeAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/decorators/GridSpacingItemDecoration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/decorators/GridSpacingItemDecoration.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/decorators/LinearSpacingItemDecoration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/decorators/LinearSpacingItemDecoration.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/dialogs/ParentDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/dialogs/ParentDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/dialogs/ParentDialogDismissal.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/dialogs/ParentDialogDismissal.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ImageViewExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ImageViewExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ViewExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ViewExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ViewGroupExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/components/ViewGroupExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/dataTypes/IntExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/dataTypes/IntExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/tools/DimensionsExtensions.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/ActivityExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/ActivityExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/BottomSheetExtensions.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/ContextExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/ContextExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/FragmentExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/FragmentExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/LifecycleExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/extensions/ui/LifecycleExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/fragments/BasePermissionFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/base/fragments/PermissionFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/fragments/ParentFragment.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/listener/DebounceListener.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/listener/DebounceListener.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/liveData/SingleLiveEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/liveData/SingleLiveEvent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/managers/InternetManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/managers/InternetManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/observers/MediaContentObserver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/observers/MediaContentObserver.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusBitmapUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusBitmapUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusCoroutineUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusCoroutineUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusFileUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusFileUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusHelperUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusHelperUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusScreenUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusScreenUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusSettingUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/pegutils/src/main/java/dev/pegasus/utils/utils/PegasusSettingUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-    </list>
+    <list default="true" id="7435b568-ec8e-49aa-b01e-b00a8106f1bf" name="Changes" comment="PegUtils" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -117,7 +64,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="609507db-08d8-45ca-96fd-531b12da9859" />
+    <option name="defaultAccountId" value="9653102d-aa21-4c31-8696-e32b73588649" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -341,7 +288,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708166388065</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="PegUtils">
+      <option name="closed" value="true" />
+      <created>1752776219230</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1752776219230</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

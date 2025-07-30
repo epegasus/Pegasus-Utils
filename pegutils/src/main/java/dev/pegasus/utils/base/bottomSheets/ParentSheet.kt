@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
 
 /**
  * @Author: SOHAIB AHMED
@@ -16,13 +14,13 @@ import androidx.databinding.ViewDataBinding
  *      -> https://stackoverflow.com/users/20440272/sohaib-ahmed
  */
 
-abstract class ParentSheet<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) : ParentSheetDismissal() {
+abstract class ParentSheet<T : ViewBinding>(val bindingFactory: (LayoutInflater) -> T) : ParentSheetDismissal() {
 
     private var _binding: T? = null
     protected val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = DataBindingUtil.inflate(layoutInflater, layoutId, null, false)
+        _binding = bindingFactory(layoutInflater)
         return binding.root
     }
 
